@@ -66,7 +66,7 @@ footer{margin:28px 0 8px;text-align:center;font-size:11px;line-height:1.5;color:
 <div class="ha"><button class="b amb" onclick="endM()">End session</button><button class="b" onclick="bkM()">Backup</button><button class="b" onclick="thm()" aria-label="Toggle theme">◐</button></div></header>
 <div class="stats" id="st"></div>
 <nav><button id="t-courts" onclick="go('courts')"></button><button id="t-queue" onclick="go('queue')"></button><button id="t-roster" onclick="go('roster')"></button></nav><main id="app"></main>
-<footer>© 2026 ELGordo. All rights reserved.<br>KitchenLine is the original work of ELGordo. Copying or redistributing it without permission is not allowed.</footer>
+<footer>© 2026 ELGordo. All rights reserved.<br>KitchenLine is the original work of ELGordo. Copying or redistributing it without permission is not allowed.<br>Version 1.3 · 25 Nov 2026</footer>
 
 <div id="md" class="ov hide" onclick="if(event.target===this)closeM()"><div class="mc" id="mc"></div></div><div id="toast"></div>
 <script>
@@ -108,16 +108,16 @@ function teams(us){const pr=us.filter(x=>x.ids.length===2),so=us.filter(x=>x.ids
  const c=t=>t.reduce((s,m)=>s+(S.pc[hk(m[0].id,m[1].id)]||0),0)+Math.abs(t[0][0].lv+t[0][1].lv-t[1][0].lv-t[1][1].lv)*.5;
  o.sort((m,n)=>c(m)-c(n));return o[0].map(t=>t.map(q=>q.id))}
 function start(c,us){const[a,b]=teams(us);[...a,...b].forEach(i=>P(i).s='c');c.g={a,b,t:now()}}
-function fill(c){if(c.g)return 0;const p=pickFour();if(!p)return 0;start(c,p);return 1}
-function upd(){if(S.auto)S.courts.forEach(fill);sel=sel.filter(i=>P(i)&&P(i).s==='q');save();render()}
+function fill(c){if(c.g)return 0;if(sel.length===4&&sel.every(i=>P(i)&&P(i).s==='q')){startSel(c);return 1}const p=pickFour();if(!p)return 0;start(c,p);return 1}
+function upd(){sel=sel.filter(i=>P(i)&&P(i).s==='q');if(S.auto)S.courts.forEach(fill);sel=sel.filter(i=>P(i)&&P(i).s==='q');save();render()}
 function autoFill(){let n=0;S.courts.forEach(c=>n+=fill(c));upd();toast(n?n+(n>1?' games':' game')+' started':S.courts.some(c=>!c.g)?'No level has 4 waiting players yet':'All courts are busy')}
 function fillOne(id){if(!fill(S.courts.find(c=>c.id===id)))return toast('Not enough waiting players at the same level');upd()}
 function ta(){S.auto^=1;upd();toast('Auto-start '+(S.auto?'on':'off'))}
 function tg(id){const p=P(id),m=p.p?P(p.p):null,ids=m&&m.s==='q'?[id,m.id]:[id];
  if(sel.includes(id))sel=sel.filter(i=>!ids.includes(i));else{if(sel.length+ids.length>4)return toast('A court holds exactly 4 players');sel.push(...ids)}render()}
-function assignSel(){const c=S.courts.find(x=>!x.g);if(sel.length!==4)return toast('Select exactly 4 players');if(!c)return toast('No open court');
- const seen=new Set(),us=[];sel.forEach(i=>{if(seen.has(i))return;seen.add(i);const p=P(i),ps=[p];if(p.p&&sel.includes(p.p)){seen.add(p.p);ps.push(P(p.p))}us.push({ids:ps.map(x=>x.id),ps})});
- if(us.length===4){const a=[sel[0],sel[1]],b=[sel[2],sel[3]];[...a,...b].forEach(i=>P(i).s='c');c.g={a,b,t:now()}}else start(c,us);sel=[];upd();toast('Game started on '+cname(c.id))}
+function startSel(c){const seen=new Set(),us=[];sel.forEach(i=>{if(seen.has(i))return;seen.add(i);const p=P(i),ps=[p];if(p.p&&sel.includes(p.p)){seen.add(p.p);ps.push(P(p.p))}us.push({ids:ps.map(x=>x.id),ps})});
+ if(us.length===4){const a=[sel[0],sel[1]],b=[sel[2],sel[3]];[...a,...b].forEach(i=>P(i).s='c');c.g={a,b,t:now()}}else start(c,us);sel=[]}
+function assignSel(){const c=S.courts.find(x=>!x.g);if(sel.length!==4)return toast('Select exactly 4 players');if(!c)return toast('No open court');startSel(c);upd();toast('Game started on '+cname(c.id))}
 /* ---------- courts ---------- */
 function rn(id){ren=id;render();const e=$('rn');if(e){e.focus();e.select()}}
 function rs2(id,v){if(ren!==id)return;ren=0;const c=S.courts.find(x=>x.id===id);if(c)c.nm=v.trim().slice(0,20);save();const e=$('rn');if(e){const b=document.createElement('button');b.className='cn';b.onclick=()=>rn(id);b.textContent=cname(id)+' ✎';e.replaceWith(b)}}
@@ -170,7 +170,7 @@ function restore(){try{const o=JSON.parse($('bk').value);if(o.v!==3||!Array.isAr
 /* ---------- views ---------- */
 function go(t){tab=t;if(t!=='roster')pick=0;render();scrollTo(0,0)}
 function court(c,i){const n=c.nm||'Court '+(i+1),h=ren===c.id?'<input type="text" id="rn" class="rni" maxlength="20" value="'+esc(n)+'" onblur="rs2('+c.id+',this.value)" onkeydown="if(event.key===\'Enter\')this.blur()">':'<button class="cn" onclick="rn('+c.id+')">'+esc(n)+' ✎</button>';
- if(!c.g){const k=pickFour();return '<div class="cd open"><div class="chd">'+h+'<span class="pill">Open</span></div><div class="mut">'+(k?'Next up: '+k.flatMap(u=>u.ps).map(p=>esc(p.name)).join(', '):'Needs 4 waiting players of the same level')+'</div><button class="b w" onclick="fillOne('+c.id+')"'+(k?'':' disabled')+'>Start game from queue</button></div>'}
+ if(!c.g){const k=sel.length===4?sel.map(i=>({ps:[P(i)]})):pickFour();return '<div class="cd open"><div class="chd">'+h+'<span class="pill">Open</span></div><div class="mut">'+(k?'Next up: '+k.flatMap(u=>u.ps).map(p=>esc(p.name)).join(', '):'Needs 4 waiting players of the same level')+'</div><button class="b w" onclick="fillOne('+c.id+')"'+(k?'':' disabled')+'>Start game from queue</button></div>'}
  const lk=t=>P(t[0]).p===t[1]?'<span class="lock">LOCKED DUO</span>':'';
  return '<div class="cd live"><div class="chd">'+h+'<span class="clk" data-t="'+c.g.t+'">'+fd(now()-c.g.t)+'</span></div>'+
  '<div class="tmb"><small>Team A '+lk(c.g.a)+'</small><b>'+tn(c.g.a)+'</b></div><div class="tmb bb"><small>Team B '+lk(c.g.b)+'</small><b>'+tn(c.g.b)+'</b></div>'+
@@ -179,7 +179,7 @@ function vCourts(){return '<div class="bar"><button class="b lime" onclick="auto
  S.courts.map(court).join('')+'<div class="bar"><button class="b" onclick="ac(1)">+ Add court</button><button class="b" onclick="ac(-1)">− Remove court</button></div>'}
 function vQueue(){const u=units();
  let h='<div class="card"><div class="row"><select style="flex:1" onchange="S.mode=this.value;upd()"><option value="fair"'+(S.mode==='fifo'?'':' selected')+'>Fair rotation by level (fewest games first)</option><option value="fifo"'+(S.mode==='fifo'?' selected':'')+'>FIFO by level (first come, first served)</option></select><button class="b lime" style="flex:none" onclick="autoFill()">⚡ Assign</button></div><div class="mut">Beginners and Int/Adv always queue separately and never mix.</div></div>';
- if(sel.length)h+='<div class="selbar"><b>'+sel.length+'/4 selected</b><span class="acts"><button class="b" onclick="sel=[];render()">Clear</button><button class="b blue" onclick="assignSel()"'+(sel.length===4?'':' disabled')+'>Assign to open court</button></span></div>';
+ if(sel.length)h+='<div class="selbar"><b>'+sel.length+'/4 selected'+(sel.length===4?' · next open court':'')+'</b><span class="acts"><button class="b" onclick="sel=[];render()">Clear</button><button class="b blue" onclick="assignSel()"'+(sel.length===4?'':' disabled')+'>Assign to open court</button></span></div>';
  if(!u.length)return h+'<div class="card mut">The stack is empty. Add players on the Roster tab.</div>';
  return h+[0,1].map(L=>{const g=u.filter(x=>x.lv===L);let r=0;
   return '<h4 class="gh">'+(L?'Intermediate / Advanced':'Beginner')+' · '+g.reduce((t,x)=>t+x.ids.length,0)+' waiting</h4>'+(g.length?g.map(x=>{const d=x.ids.length===2,s=sel.includes(x.ids[0]),pos=d?'#'+(r+1)+'–'+(r+2):'#'+(r+1),nx=r<4;r+=x.ids.length;
