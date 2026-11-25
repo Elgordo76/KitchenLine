@@ -117,7 +117,7 @@ function tg(id){const p=P(id),m=p.p?P(p.p):null,ids=m&&m.s==='q'?[id,m.id]:[id];
  if(sel.includes(id))sel=sel.filter(i=>!ids.includes(i));else{if(sel.length+ids.length>4)return toast('A court holds exactly 4 players');sel.push(...ids)}render()}
 function assignSel(){const c=S.courts.find(x=>!x.g);if(sel.length!==4)return toast('Select exactly 4 players');if(!c)return toast('No open court');
  const seen=new Set(),us=[];sel.forEach(i=>{if(seen.has(i))return;seen.add(i);const p=P(i),ps=[p];if(p.p&&sel.includes(p.p)){seen.add(p.p);ps.push(P(p.p))}us.push({ids:ps.map(x=>x.id),ps})});
- start(c,us);sel=[];upd();toast('Game started on '+cname(c.id))}
+ if(us.length===4){const a=[sel[0],sel[1]],b=[sel[2],sel[3]];[...a,...b].forEach(i=>P(i).s='c');c.g={a,b,t:now()}}else start(c,us);sel=[];upd();toast('Game started on '+cname(c.id))}
 /* ---------- courts ---------- */
 function rn(id){ren=id;render();const e=$('rn');if(e){e.focus();e.select()}}
 function rs2(id,v){if(ren!==id)return;ren=0;const c=S.courts.find(x=>x.id===id);if(c)c.nm=v.trim().slice(0,20);save();const e=$('rn');if(e){const b=document.createElement('button');b.className='cn';b.onclick=()=>rn(id);b.textContent=cname(id)+' ✎';e.replaceWith(b)}}
