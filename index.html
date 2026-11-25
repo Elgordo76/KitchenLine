@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- KitchenLine by ELGordo. © 2026 ELGordo. All rights reserved. Copying, modifying or redistributing this code without written permission from the author is not allowed. -->
+<title>KitchenLine by ELGordo</title>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#1d4ed8"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--soft:#f8fafc;--lime:#a3e635;--amb:#f59e0b;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#020617;--card:#0f172a;--ink:#f1f5f9;--mut:#94a3b8;--line:#1e293b;--soft:#111c33;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#020617;--card:#0f172a;--ink:#f1f5f9;--mut:#94a3b8;--line:#1e293b;--soft:#111c33;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0 auto;max-width:680px;background:var(--bg);color:var(--ink);font:15px/1.4 Inter,"Segoe UI",system-ui,-apple-system,sans-serif;padding:0 12px 40px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:14px 0 10px}
+.hl,.ha,.row,.bar{display:flex;gap:8px}.hl{align-items:center;gap:10px}
+.logo{width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#1d4ed8,#059669);display:grid;place-items:center;font-size:20px}
+h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.02em}h3{margin:0;font-size:18px}h4{margin:18px 0 4px}
+.mut,.meta{color:var(--mut);font-size:12px;margin:2px 0;font-weight:500}
+button,select,input,textarea{font:inherit;color:inherit}button{border:0;cursor:pointer}button:disabled{opacity:.4;cursor:default}
+input[type=text],textarea{width:100%;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--soft)}
+select{padding:10px;border-radius:12px;border:1.5px solid var(--line);background:var(--soft);font-weight:600;font-size:13px}
+.b{padding:11px 14px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-weight:700;font-size:13px;flex:1}
+.b.lime{background:var(--lime);border-color:var(--lime);color:#0f172a;font-weight:800}
+.b.blue{background:#1d4ed8;border-color:#1d4ed8;color:#fff}.b.rose{background:#e11d48;border-color:#e11d48;color:#fff}
+.b.amb{background:var(--amb);border-color:var(--amb);color:#0f172a;font-weight:800}.b.on{background:var(--ink);color:var(--bg)}
+.b.w{width:100%;margin-top:10px}.ha .b{flex:none;padding:8px 11px}
+.stats{display:flex;justify-content:space-around;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:9px;font-size:12px;color:var(--mut)}.stats b{color:var(--ink)}
+.bar{margin:12px 0}.bar select{flex:1}
+.card,.cd{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px;margin-top:12px}
+.cd.open{border:2px dashed var(--line);background:var(--soft)}
+.cd.live{background:linear-gradient(135deg,#1e3a8a,#1e40af 55%,#065f46);color:#fff;border-color:#1e40af}
+.chd,.rt{display:flex;justify-content:space-between;align-items:center;gap:8px}.chd{margin-bottom:6px}
+.pill{padding:2px 9px;border-radius:99px;font-size:11px;font-weight:800;background:#d1fae5;color:#065f46}
+.cn{background:none;font-weight:800;font-size:15px;padding:2px 0;color:inherit;text-align:left}input.rni{width:60%;padding:6px 10px;font-weight:800}
+.clk{font:700 13px ui-monospace,Menlo,monospace;color:#bef264;background:rgba(2,6,23,.5);padding:3px 10px;border-radius:10px}
+.tmb{background:rgba(255,255,255,.12);border-radius:14px;padding:9px 11px;margin-top:6px}
+.tmb small{display:block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#bfdbfe}.tmb.bb small{color:#a7f3d0}
+.lock{background:#6366f1;border-radius:6px;padding:1px 6px;font-size:9px;color:#fff;margin-left:4px}
+.qc{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px 12px;margin-top:8px;cursor:pointer;user-select:none}
+.qc.nx{border-color:#a3e635}.qc.duo{border-color:#a5b4fc}.qc.sel{border-color:#1d4ed8;background:rgba(29,78,216,.12)}
+.pos{min-width:32px;height:26px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--mut);padding:0 4px}
+.nx .pos{background:var(--lime);color:#0f172a}.sel .pos{background:#1d4ed8;color:#fff}
+.nm{flex:1;min-width:0;font-weight:800}
+.sm{padding:6px 10px;border-radius:9px;background:var(--soft);border:1px solid var(--line);font-size:12px;font-weight:700}.rm{color:#e11d48}
+.lv{font-style:normal;font-size:10px;font-weight:800;padding:1px 6px;border-radius:6px;margin-left:5px;vertical-align:middle;background:#d1fae5;color:#065f46}.lv.l1{background:#fef3c7;color:#92400e}
+.selbar,.warn{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:rgba(29,78,216,.12);border:1px solid #93c5fd;border-radius:16px;padding:10px 12px;margin-top:10px;font-size:13px}
+.warn{background:rgba(245,158,11,.15);border-color:var(--amb)}.selbar .b{flex:none;padding:8px 12px}
+.acts{display:flex;gap:6px}.dim{opacity:.4}
+nav{position:sticky;top:0;display:flex;gap:6px;padding:10px 0 4px;background:var(--bg);z-index:20}
+nav button{flex:1;padding:12px 4px;border-radius:12px;background:none;font-weight:800;font-size:13px;color:var(--mut)}nav button.on{background:var(--ink);color:var(--bg)}
+.ov{position:fixed;inset:0;background:rgba(2,6,23,.7);display:flex;align-items:center;justify-content:center;padding:14px;z-index:50}.hide{display:none!important}
+.mc{background:var(--card);border-radius:24px;width:100%;max-width:560px;max-height:88vh;overflow:auto;padding:18px}
+.mh{display:flex;justify-content:space-between;align-items:center}.x{background:none;font-size:18px;color:var(--mut)}
+.wb{display:block;width:100%;text-align:left;border-radius:16px;padding:14px;margin-top:10px;border:2px solid #93c5fd;background:var(--soft);font-weight:800}.wb.bb{border-color:#6ee7b7}
+.wb small{display:block;font-size:11px;text-transform:uppercase;color:var(--mut)}
+.lnk{background:none;color:#e11d48;font-weight:700;font-size:12px;margin-top:14px;padding:0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.grid3>div{background:var(--soft);border-radius:14px;padding:10px}.grid3 small{display:block;font-size:10px;text-transform:uppercase;color:var(--mut);font-weight:800}.grid3 b{font-size:20px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th{font-size:10px;text-transform:uppercase;color:var(--mut);text-align:left;padding:6px}td{padding:8px 6px;border-top:1px solid var(--line)}
+.lg{padding:7px 0;border-top:1px solid var(--line);font-size:13px}textarea{height:150px;font:11px ui-monospace,Menlo,monospace;margin-top:10px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90%;text-align:center;z-index:60}#toast.show{opacity:1}
+.gh{margin:16px 0 0;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+footer{margin:28px 0 8px;text-align:center;font-size:11px;line-height:1.5;color:var(--mut)}
+.pay{padding:5px 10px;border-radius:99px;font-size:11px;font-weight:800;background:rgba(245,158,11,.16);color:#d97706;border:1px solid var(--amb)}.pay.on{background:#d1fae5;color:#065f46;border-color:#6ee7b7}.ck{color:#059669;font-weight:900}
+</style></head><body>
+<header><div class="hl"><div class="logo">🏓</div><div><h1>KitchenLine</h1><div class="mut">by ELGordo · doubles open play</div></div></div>
+<div class="ha"><button class="b amb" onclick="endM()">End session</button><button class="b" onclick="bkM()">Backup</button><button class="b" onclick="thm()" aria-label="Toggle theme">◐</button></div></header>
+<div class="stats" id="st"></div>
+<nav><button id="t-courts" onclick="go('courts')"></button><button id="t-queue" onclick="go('queue')"></button><button id="t-roster" onclick="go('roster')"></button></nav><main id="app"></main>
+<footer>© 2026 ELGordo. All rights reserved.<br>KitchenLine is the original work of ELGordo. Copying or redistributing it without permission is not allowed.</footer>
+
+<div id="md" class="ov hide" onclick="if(event.target===this)closeM()"><div class="mc" id="mc"></div></div><div id="toast"></div>
+<script>
+const KEY='paddlestack_doubles_v3',MODES=[['fair','Fair rotation (fewest games first)'],['grouped','Grouped by level'],['fifo','Strict arrival (FIFO)']];
+const now=()=>Date.now(),$=i=>document.getElementById(i);
+const fresh=()=>({v:3,theme:'',mode:'fair',auto:0,start:now(),n:4,courts:[{id:1,g:null},{id:2,g:null},{id:3,g:null}],players:[],hist:[],pc:{}});
+function load(){try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.v===3)return r}catch(e){}return fresh()}
+let S=load(),tab='courts',sel=[],pick=0,armed='',at,tt,ren=0;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const P=id=>S.players.find(p=>p.id===id);
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const hk=(a,b)=>a<b?a+'|'+b:b+'|'+a;
+const fd=ms=>{const s=Math.max(0,Math.floor(ms/1000));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const wt=q=>{const m=Math.max(0,Math.floor((now()-q)/60000));return m<60?m+'m':Math.floor(m/60)+'h '+m%60+'m'};
+const hm=t=>new Date(t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+const badge=p=>'<i class="lv l'+p.lv+'">'+(p.lv?'Int/Adv':'Beg')+'</i>';
+const ck=p=>p.paid?' <span class="ck">✓</span>':'';
+let unp=0;
+const paySum=()=>{const n=S.players.filter(p=>p.paid).length;return 'Paid '+n+' of '+S.players.length+(S.fee?' · Collected ₱'+Math.round(n*S.fee*100)/100:'')};
+function pay(id){const p=P(id);p.paid=p.paid?0:1;save();render()}
+const tn=ids=>ids.map(i=>esc(P(i).name)+ck(P(i))).join(' &amp; ');
+const cname=id=>{const i=S.courts.findIndex(c=>c.id===id);return S.courts[i].nm||'Court '+(i+1)};
+function toast(t){const e=$('toast');e.textContent=t;e.className='show';clearTimeout(tt);tt=setTimeout(()=>e.className='',2400)}
+function modal(h){$('mc').innerHTML=h;$('md').classList.remove('hide')}
+function closeM(){$('md').classList.add('hide');armed=''}
+function applyTheme(){const h=document.documentElement;S.theme?h.setAttribute('data-theme',S.theme):h.removeAttribute('data-theme')}
+function thm(){const d=S.theme?S.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;S.theme=d?'light':'dark';applyTheme();save()}
+/* ---------- queue + matchmaking ---------- */
+function units(){const seen=new Set(),u=[];
+ S.players.filter(p=>p.s==='q').forEach(p=>{if(seen.has(p.id))return;seen.add(p.id);const m=p.p?P(p.p):null,ps=[p];if(m&&m.s==='q'){seen.add(m.id);ps.push(m)}
+  u.push({ps,ids:ps.map(x=>x.id),gp:Math.min(...ps.map(x=>x.gp)),q:Math.min(...ps.map(x=>x.q)),lv:Math.max(...ps.map(x=>x.lv))})});
+ return u.sort((a,b)=>S.mode==='fifo'?a.q-b.q:a.gp-b.gp||a.q-b.q)}
+function pack(l,need=4,i=0){if(!need)return[];for(;i<l.length;i++){if(l[i].ids.length<=need){const r=pack(l,need-l[i].ids.length,i+1);if(r)return[l[i],...r]}}return null}
+function pickFour(){const u=units();for(const a of u){const l=u.filter(x=>x.lv===a.lv);if(l.reduce((t,x)=>t+x.ids.length,0)>=4)return pack(l)}return null}
+function teams(us){const pr=us.filter(x=>x.ids.length===2),so=us.filter(x=>x.ids.length===1).map(x=>x.ps[0]);
+ if(pr.length===2)return[pr[0].ids,pr[1].ids];
+ if(pr.length===1)return[pr[0].ids,so.map(x=>x.id)];
+ const[w,x,y,z]=so,o=[[[w,x],[y,z]],[[w,y],[x,z]],[[w,z],[x,y]]];
+ const c=t=>t.reduce((s,m)=>s+(S.pc[hk(m[0].id,m[1].id)]||0),0)+Math.abs(t[0][0].lv+t[0][1].lv-t[1][0].lv-t[1][1].lv)*.5;
+ o.sort((m,n)=>c(m)-c(n));return o[0].map(t=>t.map(q=>q.id))}
+function start(c,us){const[a,b]=teams(us);[...a,...b].forEach(i=>P(i).s='c');c.g={a,b,t:now()}}
+function fill(c){if(c.g)return 0;const p=pickFour();if(!p)return 0;start(c,p);return 1}
+function upd(){if(S.auto)S.courts.forEach(fill);sel=sel.filter(i=>P(i)&&P(i).s==='q');save();render()}
+function autoFill(){let n=0;S.courts.forEach(c=>n+=fill(c));upd();toast(n?n+(n>1?' games':' game')+' started':S.courts.some(c=>!c.g)?'No level has 4 waiting players yet':'All courts are busy')}
+function fillOne(id){if(!fill(S.courts.find(c=>c.id===id)))return toast('Not enough waiting players at the same level');upd()}
+function ta(){S.auto^=1;upd();toast('Auto-start '+(S.auto?'on':'off'))}
+function tg(id){const p=P(id),m=p.p?P(p.p):null,ids=m&&m.s==='q'?[id,m.id]:[id];
+ if(sel.includes(id))sel=sel.filter(i=>!ids.includes(i));else{if(sel.length+ids.length>4)return toast('A court holds exactly 4 players');sel.push(...ids)}render()}
+function assignSel(){const c=S.courts.find(x=>!x.g);if(sel.length!==4)return toast('Select exactly 4 players');if(!c)return toast('No open court');
+ const seen=new Set(),us=[];sel.forEach(i=>{if(seen.has(i))return;seen.add(i);const p=P(i),ps=[p];if(p.p&&sel.includes(p.p)){seen.add(p.p);ps.push(P(p.p))}us.push({ids:ps.map(x=>x.id),ps})});
+ start(c,us);sel=[];upd();toast('Game started on '+cname(c.id))}
+/* ---------- courts ---------- */
+function rn(id){ren=id;render();const e=$('rn');if(e){e.focus();e.select()}}
+function rs2(id,v){if(ren!==id)return;ren=0;const c=S.courts.find(x=>x.id===id);if(c)c.nm=v.trim().slice(0,20);save();const e=$('rn');if(e){const b=document.createElement('button');b.className='cn';b.onclick=()=>rn(id);b.textContent=cname(id)+' ✎';e.replaceWith(b)}}
+function ac(d){if(d>0){if(S.courts.length>=12)return toast('Up to 12 courts');S.courts.push({id:S.n++,g:null})}
+ else{const i=S.courts.map(c=>c.g).lastIndexOf(null);if(S.courts.length<2)return toast('Keep at least one court');if(i<0)return toast('Finish a game first');S.courts.splice(i,1)}upd()}
+function finM(id){const c=S.courts.find(x=>x.id===id),g=c.g;
+ modal('<div class="mh"><h3>Finish '+cname(id)+'</h3><button class="x" onclick="closeM()">✕</button></div><p class="mut">Who won?</p>'+
+ '<button class="wb" onclick="fin('+id+',\'a\')"><small>Team A wins 🏆</small>'+tn(g.a)+'</button><button class="wb bb" onclick="fin('+id+',\'b\')"><small>Team B wins 🏆</small>'+tn(g.b)+'</button>'+
+ '<button class="lnk" onclick="fin('+id+',null)">Clear court without recording a result</button>')}
+function fin(id,w){const c=S.courts.find(x=>x.id===id),g=c.g,t=now();
+ if(w){const W=g[w],L=g[w==='a'?'b':'a'];
+  [g.a,g.b].forEach(m=>{const k=hk(m[0],m[1]);S.pc[k]=(S.pc[k]||0)+1});
+  S.hist.unshift({c:cname(id),wn:W.map(i=>P(i).name),ls:L.map(i=>P(i).name),d:t-g.t,at:t});
+  [...L,...W].forEach((i,k)=>{const p=P(i);p.gp++;W.includes(i)?p.w++:p.ls++;p.s='q';p.q=t+k})}
+ else[...g.a,...g.b].forEach(i=>P(i).s='q');
+ c.g=null;closeM();upd();toast(c.g?'Next game started on '+cname(id):w?'Result saved':'Court cleared')}
+/* ---------- roster ---------- */
+function addP(){const el=$('nm'),lv=+$('lv').value,names=el.value.split(/[\n,]/).map(s=>s.trim()).filter(Boolean);let k=0;
+ names.forEach((x,i)=>{if(S.players.length>=90)return;S.players.push({id:S.n++,name:x.slice(0,24),lv,p:0,paid:0,s:'q',gp:0,w:0,ls:0,q:now()+i});k++});
+ if(names.length>k)toast('Limit is 90 players');if(k)el.value='';upd();$('nm').focus()}
+function lvl(id){const p=P(id);if(p.s==='c')return toast('Finish their game first');p.lv=p.lv?0:1;if(p.p&&P(p.p)&&P(p.p).lv!==p.lv){P(p.p).p=0;p.p=0;toast('Level changed, partner lock removed')}upd()}
+function lock(id){pick=id;tab='roster';render()}
+function pair(id){const a=P(pick),b=P(id);if(a.lv!==b.lv)return toast('Partners must be the same level');a.p=id;b.p=pick;a.q=b.q=Math.min(a.q,b.q);pick=0;toast('Partners locked');upd()}
+function ul(id){const p=P(id);if(p.p&&P(p.p))P(p.p).p=0;p.p=0;upd()}
+function brk(id){const p=P(id);if(p.s==='c')return toast('Finish their game first');const n=p.s==='b'?'q':'b',t=now();
+ [id,p.p].filter(Boolean).forEach(i=>{const x=P(i);x.s=n;if(n==='q')x.q=t});upd()}
+function rm(id){const p=P(id);if(p.s==='c')return toast('Finish their game first');if(p.p&&P(p.p))P(p.p).p=0;S.players=S.players.filter(x=>x.id!==id);upd()}
+/* ---------- end of session, backup ---------- */
+function ranked(){return S.players.map(p=>({...p,pct:p.gp?p.w/p.gp*100:0,df:p.w-p.ls})).sort((a,b)=>b.w-a.w||b.pct-a.pct||b.df-a.df||a.gp-b.gp||a.name.localeCompare(b.name))}
+function summary(){return 'KitchenLine open play — final rankings ('+new Date().toLocaleDateString()+')\n'+S.hist.length+' games, '+S.players.length+' players\n\n'+ranked().map((p,i)=>(i+1)+'. '+p.name+(p.p&&P(p.p)?' [w/ '+P(p.p).name+']':'')+' — '+p.w+'W/'+p.ls+'L ('+p.gp+' GP, '+Math.round(p.pct)+'%)'+(p.paid?' ✓ paid':' (unpaid)')).join('\n')+'\n\n'+paySum()}
+function cp(t){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();let ok=0;try{ok=document.execCommand('copy')}catch(e){}a.remove();
+ if(ok)return toast('Copied to clipboard');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied to clipboard'),()=>toast('Copy blocked: select the text and copy it by hand'))}
+function arm(k,b,fn){const rs=()=>document.querySelectorAll('[data-arm]').forEach(x=>x.textContent=x.dataset.txt);clearTimeout(at);
+ if(armed===k){armed='';return fn()}armed=k;rs();b.textContent='Tap again to confirm';at=setTimeout(()=>{armed='';rs()},4000)}
+function clearAct(){S.auto=0;S.courts.forEach(c=>{if(c.g){[...c.g.a,...c.g.b].forEach(i=>P(i).s='q');c.g=null}});upd();endM()}
+function newSess(clear){const t=now();S.start=t;S.hist=[];S.pc={};S.courts.forEach(c=>c.g=null);
+ if(clear)S.players=[];else S.players.forEach((p,i)=>{p.gp=p.w=p.ls=0;p.paid=0;p.s='q';p.q=t+i});closeM();upd();toast('New session started')}
+function endM(){armed='';const r=ranked(),act=S.courts.filter(c=>c.g).length;
+ const rows=r.length?r.map((p,i)=>'<tr><td>'+(['🥇','🥈','🥉'][i]||i+1)+'</td><td><b>'+esc(p.name)+'</b>'+ck(p)+(p.p&&P(p.p)?'<div class="meta">🔒 '+esc(P(p.p).name)+'</div>':'')+'</td><td><b>'+p.w+'</b></td><td>'+p.ls+'</td><td>'+p.gp+'</td><td>'+Math.round(p.pct)+'%</td></tr>').join(''):'<tr><td colspan="6" class="mut">No players yet.</td></tr>';
+ const log=S.hist.length?S.hist.map(h=>'<div class="lg"><span class="meta">'+hm(h.at)+' · '+esc(h.c)+' · '+fd(h.d)+'</span><div><b>🏆 '+h.wn.map(esc).join(' &amp; ')+'</b> beat '+h.ls.map(esc).join(' &amp; ')+'</div></div>').join(''):'<p class="mut">No games recorded yet.</p>';
+ modal('<div class="mh"><h3>End of session</h3><button class="x" onclick="closeM()">✕</button></div><p class="mut">Ranked by games won. Ties: win % → win difference → fewer games played.</p>'+
+ (act?'<div class="warn"><span>'+act+' game(s) still on court and not counted.</span><button class="sm" onclick="clearAct()">Clear courts</button></div>':'')+
+ '<div class="grid3"><div><small>Games</small><b>'+S.hist.length+'</b></div><div><small>Players</small><b>'+S.players.length+'</b></div><div><small>Span</small><b>'+wt(S.start)+'</b></div></div>'+
+ '<div class="mut" style="margin:0 0 6px">'+paySum()+'</div><div class="tw"><table><tr><th>#</th><th>Player</th><th>W</th><th>L</th><th>GP</th><th>Win</th></tr>'+rows+'</table></div>'+
+ '<button class="b w" onclick="cp(summary())">📋 Copy summary</button><h4>Match log</h4>'+log+
+ '<h4>Start a new session</h4><button class="b w" data-arm data-txt="Keep roster &amp; locks, reset scores" onclick="arm(\'k\',this,()=>newSess(0))">Keep roster &amp; locks, reset scores</button>'+
+ '<button class="b w rose" data-arm data-txt="Clear all players" onclick="arm(\'c\',this,()=>newSess(1))">Clear all players</button>')}
+function bkM(){modal('<div class="mh"><h3>Backup</h3><button class="x" onclick="closeM()">✕</button></div><p class="mut">Copy this text somewhere safe. To restore or move devices, paste a backup over it and tap Restore.</p><textarea id="bk" spellcheck="false">'+esc(JSON.stringify(S))+'</textarea><div class="bar"><button class="b" onclick="cp($(\'bk\').value)">Copy backup</button><button class="b blue" onclick="restore()">Restore</button></div>')}
+function restore(){try{const o=JSON.parse($('bk').value);if(o.v!==3||!Array.isArray(o.courts)||!Array.isArray(o.players))throw 0;S=o;sel=[];pick=0;applyTheme();closeM();upd();toast('Backup restored')}catch(e){toast('That text is not a KitchenLine backup')}}
+/* ---------- views ---------- */
+function go(t){tab=t;if(t!=='roster')pick=0;render();scrollTo(0,0)}
+function court(c,i){const n=c.nm||'Court '+(i+1),h=ren===c.id?'<input type="text" id="rn" class="rni" maxlength="20" value="'+esc(n)+'" onblur="rs2('+c.id+',this.value)" onkeydown="if(event.key===\'Enter\')this.blur()">':'<button class="cn" onclick="rn('+c.id+')">'+esc(n)+' ✎</button>';
+ if(!c.g){const k=pickFour();return '<div class="cd open"><div class="chd">'+h+'<span class="pill">Open</span></div><div class="mut">'+(k?'Next up: '+k.flatMap(u=>u.ps).map(p=>esc(p.name)).join(', '):'Needs 4 waiting players of the same level')+'</div><button class="b w" onclick="fillOne('+c.id+')"'+(k?'':' disabled')+'>Start game from queue</button></div>'}
+ const lk=t=>P(t[0]).p===t[1]?'<span class="lock">LOCKED DUO</span>':'';
+ return '<div class="cd live"><div class="chd">'+h+'<span class="clk" data-t="'+c.g.t+'">'+fd(now()-c.g.t)+'</span></div>'+
+ '<div class="tmb"><small>Team A '+lk(c.g.a)+'</small><b>'+tn(c.g.a)+'</b></div><div class="tmb bb"><small>Team B '+lk(c.g.b)+'</small><b>'+tn(c.g.b)+'</b></div>'+
+ '<button class="b lime w" onclick="finM('+c.id+')">Finish &amp; record winner</button></div>'}
+function vCourts(){return '<div class="bar"><button class="b lime" onclick="autoFill()">⚡ Auto-assign</button><button class="b'+(S.auto?' on':'')+'" onclick="ta()">Auto-start: '+(S.auto?'On':'Off')+'</button></div>'+
+ S.courts.map(court).join('')+'<div class="bar"><button class="b" onclick="ac(1)">+ Add court</button><button class="b" onclick="ac(-1)">− Remove court</button></div>'}
+function vQueue(){const u=units();
+ let h='<div class="card"><div class="row"><select style="flex:1" onchange="S.mode=this.value;upd()"><option value="fair"'+(S.mode==='fifo'?'':' selected')+'>Fair rotation by level (fewest games first)</option><option value="fifo"'+(S.mode==='fifo'?' selected':'')+'>FIFO by level (first come, first served)</option></select><button class="b lime" style="flex:none" onclick="autoFill()">⚡ Assign</button></div><div class="mut">Beginners and Int/Adv always queue separately and never mix.</div></div>';
+ if(sel.length)h+='<div class="selbar"><b>'+sel.length+'/4 selected</b><span class="acts"><button class="b" onclick="sel=[];render()">Clear</button><button class="b blue" onclick="assignSel()"'+(sel.length===4?'':' disabled')+'>Assign to open court</button></span></div>';
+ if(!u.length)return h+'<div class="card mut">The stack is empty. Add players on the Roster tab.</div>';
+ return h+[0,1].map(L=>{const g=u.filter(x=>x.lv===L);let r=0;
+  return '<h4 class="gh">'+(L?'Intermediate / Advanced':'Beginner')+' · '+g.reduce((t,x)=>t+x.ids.length,0)+' waiting</h4>'+(g.length?g.map(x=>{const d=x.ids.length===2,s=sel.includes(x.ids[0]),pos=d?'#'+(r+1)+'–'+(r+2):'#'+(r+1),nx=r<4;r+=x.ids.length;
+   return '<div class="qc'+(s?' sel':'')+(nx?' nx':'')+(d?' duo':'')+'" onclick="tg('+x.ids[0]+')"><span class="pos">'+(s?'✓':pos)+'</span><div class="nm">'+x.ps.map(p=>esc(p.name)+ck(p)).join(' &amp; ')+(d?' 🔒':'')+'<div class="meta">'+x.gp+' games · wait <span class="wt" data-q="'+x.q+'">'+wt(x.q)+'</span></div></div>'+
+   '<button class="sm" onclick="event.stopPropagation();'+(d?'ul':'lock')+'('+x.ids[0]+')">'+(d?'Unlock':'Lock')+'</button></div>'}).join(''):'<div class="meta" style="padding:6px 2px">Nobody waiting</div>')}).join('')}
+function vRoster(){const pk=pick?P(pick):null;
+ const f='<div class="card"><input id="nm" type="text" placeholder="Player name, or paste several separated by commas" enterkeyhint="done" onkeydown="if(event.key===\'Enter\')addP()"><div class="bar"><select id="lv"><option value="0">Beginner</option><option value="1" selected>Intermediate / Advanced</option></select><button class="b blue" onclick="addP()">+ Add ('+S.players.length+'/90)</button></div></div>';
+ const bn=pk?'<div class="selbar"><b>Pick a partner for '+esc(pk.name)+'</b><button class="b" onclick="pick=0;render()">Cancel</button></div>':'';
+ const rows=[...S.players].filter(p=>!unp||!p.paid).sort((a,b)=>a.name.localeCompare(b.name)).map(p=>{
+  const ok=pk&&!p.p&&p.id!==pick&&p.s===pk.s&&p.lv===pk.lv,st={q:'In queue',c:'On court',b:'Resting'}[p.s];let a='';
+  if(pk)a=ok?'<button class="sm" onclick="pair('+p.id+')">Pair</button>':'';
+  else a=(p.s!=='c'?(p.p?'<button class="sm" onclick="ul('+p.id+')">Unlock</button>':'<button class="sm" onclick="lock('+p.id+')">Lock</button>')+'<button class="sm" onclick="brk('+p.id+')">'+(p.s==='b'?'Queue':'Rest')+'</button>':'')+'<button class="sm rm" onclick="rm('+p.id+')">✕</button>';
+  return '<div class="card'+(pk&&!ok&&p.id!==pick?' dim':'')+'" style="padding:11px 12px"><div class="rt"><b class="nm">'+esc(p.name)+'<span onclick="lvl('+p.id+')" style="cursor:pointer" title="Tap to change level">'+badge(p)+'</span></b><span class="acts" style="align-items:center"><button class="pay'+(p.paid?' on':'')+'" onclick="pay('+p.id+')">'+(p.paid?'✓ Paid':'₱ Unpaid')+'</button><span class="meta">'+st+'</span></span></div><div class="rt" style="margin-top:6px"><span class="meta">'+p.w+'W–'+p.ls+'L · '+p.gp+' games'+(p.p&&P(p.p)?' · 🔒 '+esc(P(p.p).name):'')+'</span><span class="acts">'+a+'</span></div></div>'}).join('');
+ const pc='<div class="card" style="padding:11px 12px"><div class="rt"><b>'+paySum()+'</b><label class="meta">Fee ₱ <input type="number" min="0" step="any" inputmode="decimal" value="'+(S.fee||'')+'" style="width:76px;padding:6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--soft)" onchange="S.fee=+this.value||0;save();render()"></label></div><button class="b w" onclick="unp^=1;render()">'+(unp?'Showing unpaid only · tap to show all':'Show unpaid only')+'</button></div>';
+ return f+bn+pc+(rows||(unp&&S.players.length?'<div class="card mut">Everyone has paid ✓</div>':'<div class="card mut">Add your first players above.</div>'))}
+function render(){const o=$('nm'),v=o?o.value:'',l=$('lv')?$('lv').value:'1';
+ $('app').innerHTML=tab==='courts'?vCourts():tab==='queue'?vQueue():vRoster();
+ const e=$('nm');if(e){e.value=v;$('lv').value=l}
+ const q=S.players.filter(p=>p.s==='q').length,pl=S.players.filter(p=>p.s==='c').length;
+ $('st').innerHTML='<span>On court <b>'+pl+'</b></span><span>In queue <b>'+q+'</b></span><span>Games <b>'+S.hist.length+'</b></span>';
+ [['courts','Courts',S.courts.length],['queue','Queue',q],['roster','Roster',S.players.length]].forEach(([t,n,c])=>{const b=$('t-'+t);b.textContent=n+' ('+c+')';b.className=t===tab?'on':''})}
+setInterval(()=>document.querySelectorAll('.clk').forEach(e=>e.textContent=fd(now()-e.dataset.t)),1000);
+setInterval(()=>document.querySelectorAll('.wt').forEach(e=>e.textContent=wt(+e.dataset.q)),30000);
+applyTheme();upd();
+try{if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}catch(e){}
+</script></body></html>
