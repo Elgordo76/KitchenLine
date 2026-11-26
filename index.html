@@ -66,7 +66,7 @@ footer{margin:28px 0 8px;text-align:center;font-size:11px;line-height:1.5;color:
 <div class="ha"><button class="b amb" onclick="endM()">End session</button><button class="b" onclick="bkM()">Backup</button><button class="b" onclick="thm()" aria-label="Toggle theme">◐</button></div></header>
 <div class="stats" id="st"></div>
 <nav><button id="t-courts" onclick="go('courts')"></button><button id="t-queue" onclick="go('queue')"></button><button id="t-roster" onclick="go('roster')"></button></nav><main id="app"></main>
-<footer>© 2026 ELGordo. All rights reserved.<br>KitchenLine is the original work of ELGordo. Copying or redistributing it without permission is not allowed.<br>Version 1.4 · 25 Nov 2026</footer>
+<footer>© 2026 ELGordo. All rights reserved.<br>KitchenLine is the original work of ELGordo. Copying or redistributing it without permission is not allowed.<br>Version 1.5 · 25 Nov 2026</footer>
 
 <div id="md" class="ov hide" onclick="if(event.target===this)closeM()"><div class="mc" id="mc"></div></div><div id="toast"></div>
 <script>
@@ -85,8 +85,9 @@ const hm=t=>new Date(t).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})
 const badge=p=>'<i class="lv l'+p.lv+'">'+(p.lv?'Int/Adv':'Beg')+'</i>';
 const ck=p=>p.paid?' <span class="ck">✓</span>':'';
 let unp=0;
-const paySum=()=>{const n=S.players.filter(p=>p.paid).length;return 'Paid '+n+' of '+S.players.length+(S.fee?' · Collected ₱'+Math.round(n*S.fee*100)/100:'')};
-function pay(id,b){const p=P(id);p.paid=p.paid?0:1;save();if(!b)return render();b.className='pay'+(p.paid?' on':'');b.textContent=p.paid?'✓ Paid':'₱ Unpaid';const e=$('ps');if(e)e.textContent=paySum()}
+const paySum=()=>{const c=S.players.filter(p=>p.paid===1).length,g=S.players.filter(p=>p.paid===2).length,f=S.fee||0,m=x=>Math.round(x*f*100)/100;return 'Paid '+(c+g)+' of '+S.players.length+' · Cash '+c+' · GCash '+g+(f?' · Collected ₱'+m(c+g)+' (Cash ₱'+m(c)+', GCash ₱'+m(g)+')':'')};
+const payHTML=p=>p.paid?'<button class="pay on" onclick="pay('+p.id+',0)">✓ '+(p.paid===2?'GCash':'Cash')+'</button>':'<span class="meta">Unpaid</span><button class="pay" onclick="pay('+p.id+',1)">Cash</button><button class="pay" onclick="pay('+p.id+',2)">GCash</button>';
+function pay(id,v){const p=P(id);p.paid=v;save();const a=$('pa'+id);if(!a)return render();a.innerHTML=payHTML(p);const e=$('ps');if(e)e.textContent=paySum()}
 const tn=ids=>ids.map(i=>esc(P(i).name)+ck(P(i))).join(' &amp; ');
 const cname=id=>{const i=S.courts.findIndex(c=>c.id===id);return S.courts[i].nm||'Court '+(i+1)};
 function toast(t){const e=$('toast');e.textContent=t;e.className='show';clearTimeout(tt);tt=setTimeout(()=>e.className='',2400)}
@@ -147,7 +148,7 @@ function brk(id){const p=P(id);if(p.s==='c')return toast('Finish their game firs
 function rm(id){const p=P(id);if(p.s==='c')return toast('Finish their game first');if(p.p&&P(p.p))P(p.p).p=0;S.players=S.players.filter(x=>x.id!==id);upd()}
 /* ---------- end of session, backup ---------- */
 function ranked(){return S.players.map(p=>({...p,pct:p.gp?p.w/p.gp*100:0,df:p.w-p.ls})).sort((a,b)=>b.w-a.w||b.pct-a.pct||b.df-a.df||a.gp-b.gp||a.name.localeCompare(b.name))}
-function summary(){return 'KitchenLine open play — final rankings ('+new Date().toLocaleDateString()+')\n'+S.hist.length+' games, '+S.players.length+' players\n\n'+ranked().map((p,i)=>(i+1)+'. '+p.name+(p.p&&P(p.p)?' [w/ '+P(p.p).name+']':'')+' — '+p.w+'W/'+p.ls+'L ('+p.gp+' GP, '+Math.round(p.pct)+'%)'+(p.paid?' ✓ paid':' (unpaid)')).join('\n')+'\n\n'+paySum()}
+function summary(){return 'KitchenLine open play — final rankings ('+new Date().toLocaleDateString()+')\n'+S.hist.length+' games, '+S.players.length+' players\n\n'+ranked().map((p,i)=>(i+1)+'. '+p.name+(p.p&&P(p.p)?' [w/ '+P(p.p).name+']':'')+' — '+p.w+'W/'+p.ls+'L ('+p.gp+' GP, '+Math.round(p.pct)+'%)'+(p.paid?(p.paid===2?' ✓ GCash':' ✓ Cash'):' (unpaid)')).join('\n')+'\n\n'+paySum()}
 function cp(t){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();let ok=0;try{ok=document.execCommand('copy')}catch(e){}a.remove();
  if(ok)return toast('Copied to clipboard');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied to clipboard'),()=>toast('Copy blocked: select the text and copy it by hand'))}
 function arm(k,b,fn){const rs=()=>document.querySelectorAll('[data-arm]').forEach(x=>x.textContent=x.dataset.txt);clearTimeout(at);
@@ -192,7 +193,7 @@ function vRoster(){const pk=pick?P(pick):null;
   const ok=pk&&!p.p&&p.id!==pick&&p.s===pk.s&&p.lv===pk.lv,st={q:'In queue',c:'On court',b:'Resting'}[p.s];let a='';
   if(pk)a=ok?'<button class="sm" onclick="pair('+p.id+')">Pair</button>':'';
   else a=(p.s!=='c'?(p.p?'<button class="sm" onclick="ul('+p.id+')">Unlock</button>':'<button class="sm" onclick="lock('+p.id+')">Lock</button>')+'<button class="sm" onclick="brk('+p.id+')">'+(p.s==='b'?'Queue':'Rest')+'</button>':'')+'<button class="sm rm" onclick="rm('+p.id+')">✕</button>';
-  return '<div class="card'+(pk&&!ok&&p.id!==pick?' dim':'')+'" style="padding:11px 12px"><div class="rt"><b class="nm">'+esc(p.name)+'<span onclick="lvl('+p.id+')" style="cursor:pointer" title="Tap to change level">'+badge(p)+'</span></b><span class="acts" style="align-items:center"><button class="pay'+(p.paid?' on':'')+'" onclick="pay('+p.id+',this)">'+(p.paid?'✓ Paid':'₱ Unpaid')+'</button><span class="meta">'+st+'</span></span></div><div class="rt" style="margin-top:6px"><span class="meta">'+p.w+'W–'+p.ls+'L · '+p.gp+' games'+(p.p&&P(p.p)?' · 🔒 '+esc(P(p.p).name):'')+'</span><span class="acts">'+a+'</span></div></div>'}).join('');
+  return '<div class="card'+(pk&&!ok&&p.id!==pick?' dim':'')+'" style="padding:11px 12px"><div class="rt"><b class="nm">'+esc(p.name)+'<span onclick="lvl('+p.id+')" style="cursor:pointer" title="Tap to change level">'+badge(p)+'</span></b><span class="acts" id="pa'+p.id+'" style="align-items:center;flex-wrap:wrap;justify-content:flex-end">'+payHTML(p)+'</span></div><div class="rt" style="margin-top:6px"><span class="meta">'+p.w+'W–'+p.ls+'L · '+p.gp+' games · '+st+(p.p&&P(p.p)?' · 🔒 '+esc(P(p.p).name):'')+'</span><span class="acts">'+a+'</span></div></div>'}).join('');
  const pc='<div class="card" style="padding:11px 12px"><div class="rt"><b id="ps">'+paySum()+'</b><label class="meta">Fee ₱ <input type="number" min="0" step="any" inputmode="decimal" value="'+(S.fee||'')+'" style="width:76px;padding:6px 8px;border-radius:10px;border:1.5px solid var(--line);background:var(--soft)" onchange="S.fee=+this.value||0;save();$(\'ps\').textContent=paySum()"></label></div><button class="b w" onclick="unp^=1;render()">'+(unp?'Showing unpaid only · tap to show all':'Show unpaid only')+'</button></div>';
  return f+bn+pc+(rows||(unp&&S.players.length?'<div class="card mut">Everyone has paid ✓</div>':'<div class="card mut">Add your first players above.</div>'))}
 function render(){const o=$('nm'),v=o?o.value:'',l=$('lv')?$('lv').value:'1';
